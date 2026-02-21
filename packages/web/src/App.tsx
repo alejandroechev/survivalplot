@@ -87,6 +87,9 @@ export default function App() {
         <button className="btn-primary" onClick={analyze}>
           ▶ Analyze
         </button>
+        <button className="btn-secondary" onClick={() => window.open('/intro.html', '_blank')}>
+          📖 Guide
+        </button>
         <button className="btn-secondary" onClick={toggleTheme}>
           {theme === "light" ? "🌙" : "☀️"} Theme
         </button>
