@@ -12,38 +12,7 @@ import { DataEntry } from "./components/DataEntry.tsx";
 import { KMChart } from "./components/KMChart.tsx";
 import { ResultsPanel } from "./components/ResultsPanel.tsx";
 import { AtRiskTable } from "./components/AtRiskTable.tsx";
-
-const SAMPLE_DATA = `Time\tEvent\tGroup
-6\t1\tTreatment
-6\t1\tTreatment
-6\t1\tTreatment
-7\t1\tTreatment
-10\t0\tTreatment
-13\t1\tTreatment
-16\t1\tTreatment
-22\t1\tTreatment
-23\t1\tTreatment
-6\t1\tControl
-9\t1\tControl
-10\t1\tControl
-11\t0\tControl
-17\t1\tControl
-19\t1\tControl
-20\t1\tControl
-25\t0\tControl
-32\t1\tControl
-32\t1\tControl
-34\t1\tControl
-35\t0\tControl
-1\t1\tControl
-1\t1\tControl
-2\t1\tControl
-2\t1\tControl
-3\t1\tControl
-4\t1\tControl
-4\t1\tControl
-5\t1\tControl
-5\t1\tControl`;
+import { SAMPLE_DATASETS } from "./samples/index.ts";
 
 interface AnalysisState {
   kmResults: KMResult[];
@@ -53,7 +22,7 @@ interface AnalysisState {
 
 export default function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [rawData, setRawData] = useState(SAMPLE_DATA);
+  const [rawData, setRawData] = useState(SAMPLE_DATASETS[0].data);
   const [analysis, setAnalysis] = useState<AnalysisState | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -87,6 +56,22 @@ export default function App() {
         <button className="btn-primary" onClick={analyze}>
           ▶ Analyze
         </button>
+        <select
+          className="btn-secondary"
+          defaultValue=""
+          onChange={(e) => {
+            if (e.target.value) {
+              setRawData(SAMPLE_DATASETS[Number(e.target.value)].data);
+              setAnalysis(null);
+            }
+            e.target.value = "";
+          }}
+        >
+          <option value="" disabled>📂 Samples</option>
+          {SAMPLE_DATASETS.map((s, i) => (
+            <option key={i} value={i}>{s.name}</option>
+          ))}
+        </select>
         <button className="btn-secondary" onClick={() => window.open('/intro.html', '_blank')}>
           📖 Guide
         </button>
