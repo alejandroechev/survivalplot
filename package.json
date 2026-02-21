@@ -1,0 +1,10 @@
+{
+  "name": "survivalplot",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @survivalplot/web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint"
+  }
+}
