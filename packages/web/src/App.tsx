@@ -75,6 +75,9 @@ export default function App() {
         <button className="btn-secondary" onClick={() => window.open('/intro.html', '_blank')}>
           📖 Guide
         </button>
+        <button className="btn-secondary" onClick={() => window.open('https://github.com/alejandroechev/survivalplot/issues/new', '_blank')} title="Feedback">
+          💬 Feedback
+        </button>
         <button className="btn-secondary" onClick={toggleTheme}>
           {theme === "light" ? "🌙" : "☀️"} Theme
         </button>
