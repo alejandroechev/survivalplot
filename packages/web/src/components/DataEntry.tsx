@@ -12,6 +12,16 @@ export function DataEntry({ value, onChange, onAnalyze }: Props) {
     }
   };
 
+  const exportData = () => {
+    const blob = new Blob([value], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "survival-data.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="panel">
       <h2>Data Entry</h2>
@@ -27,6 +37,11 @@ export function DataEntry({ value, onChange, onAnalyze }: Props) {
         spellCheck={false}
         placeholder="Time  Event  Group&#10;6     1      Treatment&#10;10    0      Control"
       />
+      <div className="export-row" style={{ marginTop: 8 }}>
+        <button className="btn-secondary" onClick={exportData} style={{ fontSize: 12, padding: "4px 10px" }}>
+          📄 Export Data
+        </button>
+      </div>
     </div>
   );
 }

@@ -281,9 +281,9 @@ test.describe("UI Features", () => {
   test("theme toggle switches theme", async ({ page }) => {
     await page.goto("/");
     const html = page.locator("html");
-    await page.click("button:has-text('Theme')");
+    await page.click("button[title='Toggle theme']");
     await expect(html).toHaveAttribute("data-theme", "dark");
-    await page.click("button:has-text('Theme')");
+    await page.click("button[title='Toggle theme']");
     await expect(html).toHaveAttribute("data-theme", "light");
   });
 
@@ -318,5 +318,66 @@ test.describe("UI Features", () => {
     await clickAnalyze(page);
     const refLine = page.locator(".recharts-reference-line");
     await expect(refLine).toBeVisible();
+  });
+});
+
+// ─── File Upload ──────────────────────────────────────────────────────────
+
+test.describe("File Upload", () => {
+  test("upload CSV file loads data into textarea", async ({ page }) => {
+    await page.goto("/");
+    const csvContent = "Time,Event,Group\n5,1,A\n10,0,A\n15,1,B\n20,1,B\n25,0,A\n30,1,B\n35,1,A\n40,0,B";
+    const fileInput = page.locator('input[type="file"]');
+    await fileInput.setInputFiles({
+      name: "test.csv",
+      mimeType: "text/csv",
+      buffer: Buffer.from(csvContent),
+    });
+    const textarea = page.locator("textarea");
+    await expect(textarea).toHaveValue(csvContent);
+  });
+
+  test("Upload button visible in toolbar", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("button:has-text('Upload')")).toBeVisible();
+  });
+});
+
+// ─── Section Export Buttons ───────────────────────────────────────────────
+
+test.describe("Section Export Buttons", () => {
+  test("export buttons visible on each section after analysis", async ({ page }) => {
+    await page.goto("/");
+    await clickAnalyze(page);
+    await expect(page.locator("button:has-text('Export Data')")).toBeVisible();
+    await expect(page.locator("button:has-text('Export Results')")).toBeVisible();
+    await expect(page.locator("button:has-text('PNG')")).toBeVisible();
+    await expect(page.locator("button:has-text('SVG')")).toBeVisible();
+    await expect(page.locator("button:has-text('Export Table')")).toBeVisible();
+  });
+
+  test("Export Data button visible before analysis", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("button:has-text('Export Data')")).toBeVisible();
+  });
+});
+
+// ─── Theme Toggle ─────────────────────────────────────────────────────────
+
+test.describe("Theme Toggle", () => {
+  test("theme toggle shows only icon, no 'Theme' text", async ({ page }) => {
+    await page.goto("/");
+    const themeBtn = page.locator("button[title='Toggle theme']");
+    await expect(themeBtn).toBeVisible();
+    const text = await themeBtn.textContent();
+    expect(text!.trim()).not.toContain("Theme");
+  });
+
+  test("theme persists across page reload", async ({ page }) => {
+    await page.goto("/");
+    await page.click("button[title='Toggle theme']");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   });
 });

@@ -75,9 +75,17 @@ textarea {
 .toolbar h1 {
   font-size: 20px;
   font-weight: 700;
-  margin-right: auto;
 }
 .toolbar h1 span { color: var(--primary); }
+.toolbar-spacer { flex: 1; }
+select.btn-secondary {
+  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
 .grid {
   display: grid;
   grid-template-columns: 340px 1fr;

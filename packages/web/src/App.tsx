@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   parseData,
   kaplanMeierByGroup,
@@ -21,7 +21,12 @@ interface AnalysisState {
 }
 
 export default function App() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const saved = localStorage.getItem("survivalplot-theme");
+    const t = saved === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+    return t;
+  });
   const [rawData, setRawData] = useState(SAMPLE_DATASETS[0].data);
   const [analysis, setAnalysis] = useState<AnalysisState | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +35,23 @@ export default function App() {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("survivalplot-theme", next);
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result;
+      if (typeof text === "string") {
+        setRawData(text);
+        setAnalysis(null);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
   };
 
   const analyze = useCallback(() => {
@@ -72,14 +94,25 @@ export default function App() {
             <option key={i} value={i}>{s.name}</option>
           ))}
         </select>
+        <button className="btn-secondary" onClick={() => fileInputRef.current?.click()}>
+          📂 Upload
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv,.tsv,.txt"
+          style={{ display: "none" }}
+          onChange={handleFileUpload}
+        />
+        <div className="toolbar-spacer" />
         <button className="btn-secondary" onClick={() => window.open('/intro.html', '_blank')}>
           📖 Guide
         </button>
         <button className="btn-secondary" onClick={() => window.open('https://github.com/alejandroechev/survivalplot/issues/new', '_blank')} title="Feedback">
           💬 Feedback
         </button>
-        <button className="btn-secondary" onClick={toggleTheme}>
-          {theme === "light" ? "🌙" : "☀️"} Theme
+        <button className="btn-secondary" onClick={toggleTheme} title="Toggle theme">
+          {theme === "light" ? "🌙" : "☀️"}
         </button>
       </div>
 

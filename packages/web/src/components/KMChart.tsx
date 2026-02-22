@@ -169,7 +169,7 @@ export function KMChart({ results }: Props) {
         </label>
         <div style={{ marginLeft: "auto" }} className="export-row">
           <button className="btn-secondary" onClick={exportPng} style={{ fontSize: 12, padding: "4px 10px" }}>
-            📷 PNG
+            🖼 PNG
           </button>
           <button className="btn-secondary" onClick={exportSvg} style={{ fontSize: 12, padding: "4px 10px" }}>
             📐 SVG
