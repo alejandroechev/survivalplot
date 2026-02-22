@@ -434,10 +434,13 @@
 
 <script>
   const btn = document.getElementById('theme-toggle');
-  let theme = 'light';
+  let theme = localStorage.getItem('survivalplot-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  btn.textContent = theme === 'light' ? '🌙 Dark' : '☀️ Light';
   btn.addEventListener('click', () => {
     theme = theme === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('survivalplot-theme', theme);
     btn.textContent = theme === 'light' ? '🌙 Dark' : '☀️ Light';
   });
 </script>
