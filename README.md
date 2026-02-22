@@ -4,7 +4,7 @@
 
 Replace GraphPad Prism and SPSS survival workflows with an open-source web tool that generates KM curves, log-rank tests, and at-risk tables — no install required.
 
-![SurvivalPlot screenshot](docs/screenshot.png) <!-- TODO: add screenshot -->
+![SurvivalPlot Screenshot](docs/screenshot.png)
 
 ---
 
