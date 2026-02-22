@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   parseData,
   kaplanMeierByGroup,
@@ -14,10 +14,20 @@ import { ResultsPanel } from "./components/ResultsPanel.tsx";
 import { AtRiskTable } from "./components/AtRiskTable.tsx";
 import { SAMPLE_DATASETS } from "./samples/index.ts";
 
+const STORAGE_KEY = "survivalplot-state";
+
 interface AnalysisState {
   kmResults: KMResult[];
   logRank: LogRankResult | null;
   atRisk: AtRiskRow[];
+}
+
+function loadSavedState(): { rawData: string } | null {
+  try {
+    const json = localStorage.getItem(STORAGE_KEY);
+    if (!json) return null;
+    return JSON.parse(json);
+  } catch { return null; }
 }
 
 export default function App() {
@@ -27,9 +37,18 @@ export default function App() {
     document.documentElement.setAttribute("data-theme", t);
     return t;
   });
-  const [rawData, setRawData] = useState(SAMPLE_DATASETS[0].data);
+  const saved = loadSavedState();
+  const [rawData, setRawData] = useState(saved?.rawData ?? SAMPLE_DATASETS[0].data);
   const [analysis, setAnalysis] = useState<AnalysisState | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Debounced persistence
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ rawData })); } catch { /* noop */ }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [rawData]);
 
   const toggleTheme = () => {
     const next = theme === "light" ? "dark" : "light";
@@ -75,8 +94,8 @@ export default function App() {
         <h1>
           <span>Survival</span>Plot
         </h1>
-        <button className="btn-primary" onClick={analyze}>
-          ▶ Analyze
+        <button className="btn-secondary" onClick={() => fileInputRef.current?.click()}>
+          📂 Upload
         </button>
         <select
           className="btn-secondary"
@@ -94,8 +113,8 @@ export default function App() {
             <option key={i} value={i}>{s.name}</option>
           ))}
         </select>
-        <button className="btn-secondary" onClick={() => fileInputRef.current?.click()}>
-          📂 Upload
+        <button className="btn-primary" onClick={analyze}>
+          ▶ Analyze
         </button>
         <input
           ref={fileInputRef}

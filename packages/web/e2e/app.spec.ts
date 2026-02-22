@@ -381,3 +381,39 @@ test.describe("Theme Toggle", () => {
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   });
 });
+
+// ─── State Persistence ────────────────────────────────────────────────────
+
+test.describe("State Persistence", () => {
+  test("textarea data persists across reload", async ({ page }) => {
+    await page.goto("/");
+    const textarea = page.locator("textarea");
+    const customData = "Time\tEvent\tGroup\n5\t1\tA\n10\t0\tA\n15\t1\tB\n20\t1\tB";
+    await textarea.fill(customData);
+    // Wait for debounce
+    await page.waitForTimeout(700);
+    await page.reload();
+    await expect(textarea).toHaveValue(customData);
+  });
+});
+
+// ─── Toolbar Button Order ─────────────────────────────────────────────────
+
+test.describe("Toolbar Button Order", () => {
+  test("buttons appear in order: Upload, Samples, Analyze, spacer, Guide, Feedback, Theme", async ({ page }) => {
+    await page.goto("/");
+    const toolbar = page.locator(".toolbar");
+    const html = await toolbar.innerHTML();
+    const uploadIdx = html.indexOf("Upload");
+    const samplesIdx = html.indexOf("Samples");
+    const analyzeIdx = html.indexOf("Analyze");
+    const spacerIdx = html.indexOf("toolbar-spacer");
+    const guideIdx = html.indexOf("Guide");
+    const feedbackIdx = html.indexOf("Feedback");
+    expect(uploadIdx).toBeLessThan(samplesIdx);
+    expect(samplesIdx).toBeLessThan(analyzeIdx);
+    expect(analyzeIdx).toBeLessThan(spacerIdx);
+    expect(spacerIdx).toBeLessThan(guideIdx);
+    expect(guideIdx).toBeLessThan(feedbackIdx);
+  });
+});
