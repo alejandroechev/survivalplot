@@ -12,6 +12,7 @@ import { DataEntry } from "./components/DataEntry.tsx";
 import { KMChart } from "./components/KMChart.tsx";
 import { ResultsPanel } from "./components/ResultsPanel.tsx";
 import { AtRiskTable } from "./components/AtRiskTable.tsx";
+import { FeedbackModal } from "./components/FeedbackModal.tsx";
 import { SAMPLE_DATASETS } from "./samples/index.ts";
 
 const STORAGE_KEY = "survivalplot-state";
@@ -41,6 +42,7 @@ export default function App() {
   const [rawData, setRawData] = useState(saved?.rawData ?? SAMPLE_DATASETS[0].data);
   const [analysis, setAnalysis] = useState<AnalysisState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   // Debounced persistence
   useEffect(() => {
@@ -127,14 +129,16 @@ export default function App() {
         <button className="btn-secondary" onClick={() => window.open('/intro.html', '_blank')}>
           📖 Guide
         </button>
-        <button className="btn-secondary" onClick={() => window.open('https://github.com/alejandroechev/survivalplot/issues/new', '_blank')} title="Feedback">
+        <button className="btn-secondary" onClick={() => setShowFeedback(true)} title="Feedback">
           💬 Feedback
         </button>
+        <a href="https://github.com/alejandroechev/survivalplot" target="_blank" rel="noopener" className="github-link">GitHub</a>
         <button className="btn-secondary" onClick={toggleTheme} title="Toggle theme">
           {theme === "light" ? "🌙" : "☀️"}
         </button>
       </div>
 
+      <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} product="SurvivalPlot" />
       <div className="grid">
         <div>
           <DataEntry value={rawData} onChange={setRawData} onAnalyze={analyze} />
