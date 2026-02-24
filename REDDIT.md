@@ -12,7 +12,7 @@ Built a free web app for Kaplan-Meier survival analysis. It computes survival cu
 
 Just paste your time-to-event data with censoring indicators, and it generates everything. Handles right-censored data and multiple groups.
 
-No R, no SAS, no SPSS license needed. Runs entirely in your browser — no data leaves your machine.
+Runs entirely in your browser with data staying on your machine.
 
 🔗 **Live:** https://survivalplot.vercel.app
 📂 **Source:** https://github.com/alejandroechev/survivalplot
@@ -23,13 +23,13 @@ Would love feedback from statisticians — what's missing for real clinical data
 
 ## Post 2: r/biostatistics
 
-**Title:** Free browser-based Kaplan-Meier tool — survival curves, log-rank test, at-risk tables without R or SAS
+**Title:** Free browser-based Kaplan-Meier tool — survival curves, log-rank test, at-risk tables
 
 **Body:**
 
 I built SurvivalPlot — a free web tool for Kaplan-Meier survival analysis. It does the product-limit estimator, Greenwood standard errors, log-rank chi-square test, and generates at-risk tables that journals want to see.
 
-Designed for clinical researchers who need quick KM analysis without spinning up R or paying for SPSS. Paste your data, get your curves and p-values.
+Designed for quick KM analysis directly in the browser. Paste your data, get your curves and p-values.
 
 🔗 https://survivalplot.vercel.app
 📂 https://github.com/alejandroechev/survivalplot
@@ -46,9 +46,10 @@ What features would biostatisticians want? Looking for feedback to make this pra
 
 Built a free browser tool for KM survival analysis. Upload time-to-event data, get survival curves with confidence intervals, log-rank test p-values, median survival, and at-risk tables.
 
-Made this because clinical researchers shouldn't need a statistics software license for standard survival analysis. No install, no login, data stays on your computer.
+Built to provide straightforward survival analysis directly in the browser with data staying on your machine.
 
 🔗 https://survivalplot.vercel.app
 📂 https://github.com/alejandroechev/survivalplot
 
 Would love to hear what clinical researchers need — what would make this useful for your studies?
+
